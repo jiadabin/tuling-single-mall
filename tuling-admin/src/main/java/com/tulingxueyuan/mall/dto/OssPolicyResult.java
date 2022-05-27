@@ -4,7 +4,7 @@ import io.swagger.annotations.ApiModelProperty;
 
 public class OssPolicyResult {
 
-    @ApiModelProperty("访问身份验证中用到用户标识")
+    @ApiModelProperty("访问身份验证中用到用户标识！！！！")
     private String accessKeyId;
     @ApiModelProperty("用户表单上传的策略,经过base64编码过的字符串")
     private String policy;
