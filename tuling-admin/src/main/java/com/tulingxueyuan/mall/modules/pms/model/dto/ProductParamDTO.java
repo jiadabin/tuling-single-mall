@@ -26,7 +26,7 @@ public class ProductParamDTO {
     private Integer pageNum;
     private Integer pageSize;
     private Integer publishStatus;
-    private Integer veryfyStatus;
+    private Integer verifyStatus;
     private String productSn;
     private Long productCategoryId;
     private Long brandId;

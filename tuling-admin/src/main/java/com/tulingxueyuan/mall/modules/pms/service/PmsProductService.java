@@ -3,6 +3,7 @@ package com.tulingxueyuan.mall.modules.pms.service;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tulingxueyuan.mall.modules.pms.model.dto.ProductParamDTO;
 
 import java.util.List;
 
@@ -16,4 +17,5 @@ import java.util.List;
  */
 public interface PmsProductService extends IService<PmsProduct> {
 
+    Page list(ProductParamDTO param);
 }
