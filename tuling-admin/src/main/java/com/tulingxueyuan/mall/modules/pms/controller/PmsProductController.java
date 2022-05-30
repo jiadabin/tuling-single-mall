@@ -4,7 +4,6 @@ package com.tulingxueyuan.mall.modules.pms.controller;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tulingxueyuan.mall.common.api.CommonPage;
 import com.tulingxueyuan.mall.common.api.CommonResult;
-import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 import com.tulingxueyuan.mall.modules.pms.model.dto.ProductParamDTO;
 import com.tulingxueyuan.mall.modules.pms.service.PmsProductService;
 import io.swagger.annotations.ApiOperation;
@@ -30,7 +29,7 @@ import java.util.List;
 public class PmsProductController {
 
     @Autowired
-    private PmsProductService pmsProductService;
+    private PmsProductService ProductService;
 
     /**
      * url:'/product/list',
@@ -46,9 +45,24 @@ public class PmsProductController {
     @RequestMapping(value = "/list", method= RequestMethod.GET)
     public CommonResult list(ProductParamDTO param) {
 
-        Page page = pmsProductService.list(param);
+        Page page = ProductService.list(param);
 
         return CommonResult.success(CommonPage.restPage(page));
+    }
+
+    /**
+     * url:'/product/update/deleteStatus',
+     *     method:'post',
+     *     params:params
+     */
+    @RequestMapping(value = "/update/deleteStatus", method = RequestMethod.POST)
+    public CommonResult delete(@RequestParam("ids") List<Long> ids) {
+        boolean result = ProductService.removeByIds(ids);
+        if(result) {
+            return CommonResult.success(result);
+        } else {
+            return CommonResult.failed();
+        }
     }
 }
 
