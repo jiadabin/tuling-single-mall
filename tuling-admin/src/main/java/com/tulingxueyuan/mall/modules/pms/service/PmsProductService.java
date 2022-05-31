@@ -1,5 +1,6 @@
 package com.tulingxueyuan.mall.modules.pms.service;
 
+import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -18,4 +19,6 @@ import java.util.List;
 public interface PmsProductService extends IService<PmsProduct> {
 
     Page list(ProductParamDTO param);
+
+    boolean updateStatus(List<Long> ids, Integer newStatus, SFunction<PmsProduct, ?> getStatus);
 }
