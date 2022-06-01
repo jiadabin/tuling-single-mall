@@ -1,21 +1,19 @@
 package com.tulingxueyuan.mall.modules.pms.controller;
 
 
-import com.baomidou.mybatisplus.core.toolkit.support.SFunction;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.tulingxueyuan.mall.common.api.CommonPage;
 import com.tulingxueyuan.mall.common.api.CommonResult;
+import com.tulingxueyuan.mall.dto.ProductSaveParamsDTO;
+import com.tulingxueyuan.mall.dto.ProductUpdateInitDTO;
 import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 import com.tulingxueyuan.mall.modules.pms.model.dto.ProductParamDTO;
 import com.tulingxueyuan.mall.modules.pms.service.PmsProductService;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
-
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -111,6 +109,52 @@ public class PmsProductController {
         if(result) {
             return CommonResult.success(result);
         } else {
+            return CommonResult.failed();
+        }
+    }
+
+    /**
+     *  商品添加
+     * url:'/product/create',
+     *     method:'post',
+     *     data:data    json
+     */
+    @RequestMapping(value="/create",method = RequestMethod.POST)
+    public CommonResult create(@RequestBody ProductSaveParamsDTO productSaveParamsDTO){
+        boolean result= productService.create(productSaveParamsDTO);
+        if(result){
+            return CommonResult.success(result);
+        }
+        else {
+            return CommonResult.failed();
+        }
+    }
+
+    /**
+     *  获取编辑状态下商品信息
+     *  url:'/product/updateInfo/'+id,
+     *     method:'get',
+     */
+    @RequestMapping(value="/updateInfo/{id}")
+    public CommonResult getUpdateInfo(@PathVariable Long id){
+        ProductUpdateInitDTO updateInitDTO= productService.getUpdateInfo(id);
+        return CommonResult.success(updateInitDTO);
+    }
+
+
+    /**
+     *  商品修改—保存
+     *  url:'/product/update/'+id,
+     *     method:'post',
+     *     data:data   json
+     */
+    @RequestMapping(value="/update/{id}",method = RequestMethod.POST)
+    public CommonResult update(@RequestBody @Valid ProductSaveParamsDTO productSaveParamsDTO){
+        boolean result= productService.update(productSaveParamsDTO);
+        if(result){
+            return CommonResult.success(result);
+        }
+        else {
             return CommonResult.failed();
         }
     }
