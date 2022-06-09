@@ -1,11 +1,13 @@
 package com.tulingxueyuan.mall.modules.pms.controller;
 
 import com.tulingxueyuan.mall.common.api.CommonResult;
+import com.tulingxueyuan.mall.dto.HomeGoodsSaleDTO;
 import com.tulingxueyuan.mall.dto.HomeMenusBannerDTO;
 import com.tulingxueyuan.mall.dto.HomeMenusDTO;
 import com.tulingxueyuan.mall.modules.pms.service.PmsProductCategoryService;
 import com.tulingxueyuan.mall.modules.sms.model.SmsHomeAdvertise;
 import com.tulingxueyuan.mall.modules.sms.service.SmsHomeAdvertiseService;
+import com.tulingxueyuan.mall.modules.sms.service.SmsHomeCategoryService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,8 +28,8 @@ public class HomeController {
     PmsProductCategoryService productCategoryService;
     @Autowired
     SmsHomeAdvertiseService homeAdvertiseService;
-//    @Autowired
-//    SmsHomeCategoryService homeCategoryService;
+    @Autowired
+    SmsHomeCategoryService homeCategoryService;
 
 
     /**
@@ -49,5 +51,15 @@ public class HomeController {
 
         return CommonResult.success(homeMenusBannerDTO);
     }
+
+    /**
+     * goods_sale
+     */
+    @RequestMapping(value = "/goods_sale",method = RequestMethod.GET)
+    public CommonResult getGoodsSale(){
+        List<HomeGoodsSaleDTO> list= homeCategoryService.getGoodsSale();
+        return CommonResult.success(list);
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.tulingxueyuan.mall.modules.pms.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.tulingxueyuan.mall.dto.ProductDetailDTO;
 import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 
 /**
@@ -13,4 +14,5 @@ import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
  */
 public interface PmsProductService extends IService<PmsProduct> {
 
+    ProductDetailDTO getProductDetail(Long id);
 }

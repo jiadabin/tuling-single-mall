@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="tuling-admin" />
-        <module name="tuling-portal" />
         <module name="tuling-mpbg" />
-        <module name="tuling-common" />
         <module name="tuling-test" />
+        <module name="tuling-portal" />
+        <module name="tuling-common" />
+        <module name="tuling-admin" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>

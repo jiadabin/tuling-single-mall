@@ -350,8 +350,7 @@ CREATE TABLE `oms_company_address` (
 -- ----------------------------
 INSERT INTO `oms_company_address` VALUES ('1', '深圳发货点', '1', '1', '大梨', '18000000000', '广东省', '深圳市', '南山区', '科兴科学园');
 INSERT INTO `oms_company_address` VALUES ('2', '北京发货点', '0', '0', '大梨', '18000000000', '北京市', null, '南山区', '科兴科学园');
-INSERT INTO `oms_company_address` VALUES ('3', '南京发货点', '0', '0', '大梨', '18000000000', '江苏省', '南京市', '南山区', '科兴科学园');
-
+INSERT INTO `oms_company_address` VAL
 -- ----------------------------
 -- Table structure for oms_order
 -- ----------------------------
@@ -483,6 +482,7 @@ INSERT INTO `oms_order_item` VALUES ('42', '16', '201809140101000001', '27', 'ht
 INSERT INTO `oms_order_item` VALUES ('43', '16', '201809140101000001', '28', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180615/5a9d248cN071f4959.jpg', '红米5A', '小米', '7437789', '649.00', '1', '102', '201808270028001', '19', null, null, null, '满减优惠：满1000.00元，减120.00元', '57.60', '0.35', '0.00', '591.05', '649', '649', '[{\"key\":\"颜色\",\"value\":\"金色\"},{\"key\":\"容量\",\"value\":\"16G\"}]');
 INSERT INTO `oms_order_item` VALUES ('44', '16', '201809140101000001', '28', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180615/5a9d248cN071f4959.jpg', '红米5A', '小米', '7437789', '699.00', '1', '103', '201808270028001', '19', null, null, null, '满减优惠：满1000.00元，减120.00元', '62.40', '0.37', '0.00', '636.23', '649', '649', '[{\"key\":\"颜色\",\"value\":\"金色\"},{\"key\":\"容量\",\"value\":\"32G\"}]');
 INSERT INTO `oms_order_item` VALUES ('45', '16', '201809140101000001', '29', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180615/5acc5248N6a5f81cd.jpg', 'Apple iPhone 8 Plus', '苹果', '7437799', '5499.00', '1', '106', '201808270029001', '19', null, null, null, '无优惠', '0.00', '2.94', '0.00', '5496.06', '5499', '5499', '[{\"key\":\"颜色\",\"value\":\"金色\"},{\"key\":\"容量\",\"value\":\"32G\"}]');
+UES ('3', '南京发货点', '0', '0', '大梨', '18000000000', '江苏省', '南京市', '南山区', '科兴科学园');
 
 -- ----------------------------
 -- Table structure for oms_order_operate_history
@@ -1602,31 +1602,53 @@ INSERT INTO `sms_flash_promotion_session` VALUES ('7', '20:00', '20:00:33', '21:
 -- Table structure for sms_home_advertise
 -- ----------------------------
 DROP TABLE IF EXISTS `sms_home_advertise`;
-CREATE TABLE `sms_home_advertise` (
+CREATE TABLE `sms_home_advertise`  (
   `id` bigint(20) NOT NULL AUTO_INCREMENT,
-  `name` varchar(100) DEFAULT NULL,
-  `type` int(1) DEFAULT NULL COMMENT '轮播位置：0->PC首页轮播；1->app首页轮播',
-  `pic` varchar(500) DEFAULT NULL,
-  `start_time` datetime DEFAULT NULL,
-  `end_time` datetime DEFAULT NULL,
-  `status` int(1) DEFAULT NULL COMMENT '上下线状态：0->下线；1->上线',
-  `click_count` int(11) DEFAULT NULL COMMENT '点击数',
-  `order_count` int(11) DEFAULT NULL COMMENT '下单数',
-  `url` varchar(500) DEFAULT NULL COMMENT '链接地址',
-  `note` varchar(500) DEFAULT NULL COMMENT '备注',
-  `sort` int(11) DEFAULT '0' COMMENT '排序',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COMMENT='首页轮播广告表';
+  `name` varchar(100) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `type` int(1) NULL DEFAULT NULL COMMENT '轮播位置：0->PC首页轮播；1->app首页轮播',
+  `pic` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `start_time` datetime NULL DEFAULT NULL,
+  `end_time` datetime NULL DEFAULT NULL,
+  `status` int(1) NULL DEFAULT NULL COMMENT '上下线状态：0->下线；1->上线',
+  `click_count` int(11) NULL DEFAULT NULL COMMENT '点击数',
+  `order_count` int(11) NULL DEFAULT NULL COMMENT '下单数',
+  `url` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接地址',
+  `note` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '备注',
+  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 12 CHARACTER SET = utf8 COLLATE = utf8_general_ci COMMENT = '首页轮播广告表' ROW_FORMAT = Compact;
+
 
 -- ----------------------------
 -- Records of sms_home_advertise
 -- ----------------------------
-INSERT INTO `sms_home_advertise` VALUES ('2', '夏季大热促销', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180615/xiaomi.jpg', '2018-11-01 14:01:37', '2018-11-15 14:01:37', '0', '0', '0', null, '夏季大热促销', '0');
-INSERT INTO `sms_home_advertise` VALUES ('3', '夏季大热促销1', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180607/5ac1bf58Ndefaac16.jpg', '2018-11-13 14:01:37', '2018-11-13 14:01:37', '0', '0', '0', null, '夏季大热促销1', '0');
-INSERT INTO `sms_home_advertise` VALUES ('4', '夏季大热促销2', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20180615/5a9d248cN071f4959.jpg', '2018-11-13 14:01:37', '2018-11-13 14:01:37', '1', '0', '0', null, '夏季大热促销2', '0');
-INSERT INTO `sms_home_advertise` VALUES ('9', '电影推荐广告', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20181113/movie_ad.jpg', '2018-11-01 00:00:00', '2018-11-24 00:00:00', '1', '0', '0', 'www.baidu.com', '电影推荐广告', '100');
-INSERT INTO `sms_home_advertise` VALUES ('10', '汽车促销广告', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20181113/car_ad.jpg', '2018-11-13 00:00:00', '2018-11-24 00:00:00', '1', '0', '0', 'xxx', null, '99');
-INSERT INTO `sms_home_advertise` VALUES ('11', '汽车推荐广告', '1', 'http://macro-oss.oss-cn-shenzhen.aliyuncs.com/mall/images/20181113/car_ad2.jpg', '2018-11-13 00:00:00', '2018-11-30 00:00:00', '1', '0', '0', 'xxx', null, '98');
+INSERT INTO `sms_home_advertise` VALUES (9, 'xxxx广告', 1, 'https://tuling--mall.oss-cn-chengdu.aliyuncs.com/20210114134341.png', '2018-11-01 00:00:00', '2018-11-24 00:00:00', 1, 0, 0, 'www.baidu.com', '电影推荐广告', 40);
+INSERT INTO `sms_home_advertise` VALUES (10, '汽车促销广告', 1, 'https://tuling--mall.oss-cn-chengdu.aliyuncs.com/20210114134341.png', '2018-11-13 00:00:00', '2018-11-24 00:00:00', 1, 0, 0, 'http://www.tulingxueyuan.cn', NULL, 50);
+INSERT INTO `sms_home_advertise` VALUES (11, '汽车推荐广告', 1, 'https://tuling--mall.oss-cn-chengdu.aliyuncs.com/9ebff5f5c1f52f2dbdd611897adbefd4.jpg', '2018-11-13 00:00:00', '2018-11-30 00:00:00', 1, 0, 0, 'xxx', NULL, 60);
+
+
+
+-- ----------------------------
+-- Table structure for sms_home_category
+-- ----------------------------
+DROP TABLE IF EXISTS `sms_home_category`;
+CREATE TABLE `sms_home_category`  (
+  `id` bigint(20) NOT NULL AUTO_INCREMENT,
+  `category_id` bigint(20) NULL DEFAULT NULL  COMMENT '二级分类id',
+  `category_name` varchar(255) CHARACTER SET utf8 COLLATE utf8_bin NULL DEFAULT NULL,
+  `type` int(1) NULL DEFAULT NULL COMMENT '广告位置：0->PC广告首页；1->app广告轮播',
+  `status` int(1) NULL DEFAULT NULL COMMENT '上下线状态：0->下线；1->上线',
+  `pic` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL,
+  `url` varchar(500) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT NULL COMMENT '链接地址',
+  `sort` int(11) NULL DEFAULT 0 COMMENT '排序',
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8 COLLATE = utf8_bin ROW_FORMAT = Compact;
+
+-- ----------------------------
+-- Records of sms_home_category
+-- ----------------------------
+INSERT INTO `sms_home_category` VALUES (1, 19, '手机', 0, 1, 'https://tulingmall-xushu.oss-cn-chengdu.aliyuncs.com/phone.jpg', 'http://localhost:8081/#/detail/26', 10);
+INSERT INTO `sms_home_category` VALUES (2, 7, '外套', 0, 1, 'https://tulingmall-xushu.oss-cn-chengdu.aliyuncs.com/clothes.jpg', 'http://localhost:8081/#/detail/30', 20);
 
 -- ----------------------------
 -- Table structure for sms_home_brand

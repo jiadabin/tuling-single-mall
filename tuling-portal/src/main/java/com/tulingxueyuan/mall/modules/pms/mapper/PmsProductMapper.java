@@ -1,6 +1,7 @@
 package com.tulingxueyuan.mall.modules.pms.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.tulingxueyuan.mall.dto.ProductDetailDTO;
 import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
 
 /**
@@ -13,4 +14,5 @@ import com.tulingxueyuan.mall.modules.pms.model.PmsProduct;
  */
 public interface PmsProductMapper extends BaseMapper<PmsProduct> {
 
+    ProductDetailDTO getProductDetail(Long id);
 }
