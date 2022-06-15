@@ -3,15 +3,23 @@ package com.tulingxueyuan.mall.modules.ums.service.impl;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tulingxueyuan.mall.common.exception.Asserts;
+import com.tulingxueyuan.mall.common.util.ComConstants;
+import com.tulingxueyuan.mall.modules.ums.mapper.UmsMemberLoginLogMapper;
 import com.tulingxueyuan.mall.modules.ums.model.UmsMember;
 import com.tulingxueyuan.mall.modules.ums.mapper.UmsMemberMapper;
+import com.tulingxueyuan.mall.modules.ums.model.UmsMemberLoginLog;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberCacheService;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -28,6 +36,12 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
 
     @Autowired
     UmsMemberCacheService memberCacheService;
+
+    @Autowired
+    UmsMemberLoginLogMapper loginLogMapper;
+
+    @Autowired
+    HttpSession session;
 
     @Override
     public UmsMember register(UmsMember umsMemberParam) {
@@ -98,5 +112,34 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
             return user;
         }
         return null;
+    }
+
+    /**
+     * 获得当前用户
+     * @return
+     */
+    public UmsMember getCurrentMember(){
+        // 标识
+        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberDetails memberDetails =(MemberDetails) authentication.getPrincipal();
+        return memberDetails.getUmsMember();*/
+        UmsMember umsMember = (UmsMember) session.getAttribute(ComConstants.FLAG_MEMBER_USER);
+        return umsMember;
+    }
+
+    /**
+     * 添加登录记录
+     * @param username 用户名
+     */
+    private void insertLoginLog(String username) {
+        UmsMember user = getAdminByUsername(username);
+        if(user==null) return;
+        UmsMemberLoginLog loginLog = new UmsMemberLoginLog();
+        loginLog.setMemberId(user.getId());
+        loginLog.setCreateTime(new Date());
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        loginLog.setIp(request.getRemoteAddr());
+        loginLogMapper.insert(loginLog);
     }
 }
