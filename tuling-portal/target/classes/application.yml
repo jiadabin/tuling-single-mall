@@ -23,6 +23,12 @@ redis:
   key:
     user: 'ums:member'
 
+jwt:
+  secret: tuling-mall-portal  #服务端私钥（一定不能泄露）
+  expiration: 86400   #过期时间 60*60*24  =一天
+  tokenHead: Bearer #jwt规范  #告诉客户端jwt令牌开头需要加的一个字符串
+  tokenHeader: Authorization #告诉客户端你要在请求头里面传什么参数名字
+
 secure:
   ignored:
     urls: #安全路径白名单

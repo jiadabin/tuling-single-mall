@@ -18,4 +18,6 @@ public interface UmsMemberService extends IService<UmsMember> {
     UmsMember login(String username, String password);
 
     UmsMember getCurrentMember();
+
+    UmsMember getMemberByUsername(String username);
 }

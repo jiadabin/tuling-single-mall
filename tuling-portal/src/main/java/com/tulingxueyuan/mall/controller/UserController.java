@@ -2,6 +2,7 @@ package com.tulingxueyuan.mall.controller;
 
 import com.tulingxueyuan.mall.common.api.CommonResult;
 import com.tulingxueyuan.mall.common.util.ComConstants;
+import com.tulingxueyuan.mall.common.util.JwtTokenUtil;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberService;
 import com.tulingxueyuan.mall.modules.ums.model.UmsMember;
 import io.swagger.annotations.Api;
@@ -31,12 +32,12 @@ public class UserController {
     UmsMemberService memberService;
     @Autowired
     HttpSession session;
-//    @Autowired
-//    JwtTokenUtil jwtTokenUtil;
-//    @Value("${jwt.tokenHead}")
-//    private String tokenHead;
-//    @Value("${jwt.tokenHeader}")
-//    private String tokenHeader;
+    @Autowired
+    JwtTokenUtil jwtTokenUtil;
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
 
 
     @ApiOperation(value = "用户注册")
@@ -59,16 +60,16 @@ public class UserController {
             return CommonResult.validateFailed("用户名或密码错误");
         }
 
-//        String token = jwtTokenUtil.generateUserNameStr(login.getUsername());
+        String token = jwtTokenUtil.generateUserNameStr(login.getUsername());
 
         session.setAttribute(ComConstants.FLAG_MEMBER_USER, login);
         System.out.println(login.getId());
 
         Map<String, String> tokenMap = new HashMap<>();
-//        tokenMap.put("token",token);
-//        tokenMap.put("tokenHead",tokenHead);
-//        tokenMap.put("tokenHeader",tokenHeader);
+        tokenMap.put("token",token);
+        tokenMap.put("tokenHead",tokenHead);
+        tokenMap.put("tokenHeader",tokenHeader);
         // jwt
-        return CommonResult.success(login);
+        return CommonResult.success(tokenMap);
     }
 }

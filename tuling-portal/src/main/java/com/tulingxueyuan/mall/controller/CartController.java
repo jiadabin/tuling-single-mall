@@ -36,4 +36,14 @@ public class CartController {
             return  CommonResult.failed();
         }
     }
+
+    /**
+     *  初始化状态栏的购物车商品数量
+     *   this.axios.get('/car/products/sum').then((res=0)=>{
+     */
+    @RequestMapping(value="/products/sum",method = RequestMethod.GET)
+    public CommonResult getCarProdutSum(){
+        Integer count= cartItemService.getCarProdutSum();
+        return CommonResult.success(count);
+    }
 }

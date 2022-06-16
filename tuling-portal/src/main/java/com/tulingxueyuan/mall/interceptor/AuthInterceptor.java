@@ -1,10 +1,14 @@
 package com.tulingxueyuan.mall.interceptor;
 
+import cn.hutool.core.util.StrUtil;
 import com.tulingxueyuan.mall.common.api.ResultCode;
 import com.tulingxueyuan.mall.common.exception.ApiException;
 import com.tulingxueyuan.mall.common.util.ComConstants;
+import com.tulingxueyuan.mall.common.util.JwtTokenUtil;
+import com.tulingxueyuan.mall.modules.ums.model.UmsMember;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
@@ -25,6 +29,15 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
     @Autowired
     private UmsMemberService umsMemberService;
 
+    @Value("${jwt.tokenHeader}")
+    private String tokenHeader;
+
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
+
+    @Autowired
+    private JwtTokenUtil jwtTokenUtil;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         //1、不需要登录就可以访问的路径——白名单
@@ -39,10 +52,27 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             }
         }
 
-        //2、未登录用户，直接拒绝访问
-        if (null == request.getSession().getAttribute(ComConstants.FLAG_MEMBER_USER)) {
+        //拿到jwt令牌
+        String jwt = request.getHeader(tokenHeader);
+        //判断是否存在 判断开头是否加了tokenHead
+        if( StrUtil.isBlank(jwt) || !jwt.startsWith(tokenHead) ) {
             throw new ApiException(ResultCode.UNAUTHORIZED);
         }
+
+        //解密
+        jwt = jwt.substring(tokenHead.length());
+        String username = jwtTokenUtil.getUserNameFromToken(jwt);
+
+        if (StrUtil.isBlank(username)) {
+            throw new ApiException(ResultCode.UNAUTHORIZED);
+        }
+        //从服务器中查询
+        UmsMember umsMember = umsMemberService.getMemberByUsername(username);
+        if( umsMember == null ) {
+            throw new ApiException(ResultCode.UNAUTHORIZED);
+        }
+
+        JwtTokenUtil.currentUserName.set(username);
 
         return true;
     }

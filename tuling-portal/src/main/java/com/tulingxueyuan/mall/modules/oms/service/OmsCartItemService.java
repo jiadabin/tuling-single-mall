@@ -15,4 +15,6 @@ import com.baomidou.mybatisplus.extension.service.IService;
 public interface OmsCartItemService extends IService<OmsCartItem> {
 
     Boolean add(AddCartDTO addCartDTO);
+
+    Integer getCarProdutSum();
 }
