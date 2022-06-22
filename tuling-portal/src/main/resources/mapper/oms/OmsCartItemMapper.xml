@@ -26,5 +26,25 @@
         <result column="product_sn" property="productSn" />
         <result column="product_attr" property="productAttr" />
     </resultMap>
+    <resultMap id="CartItemStockMap" extends="BaseResultMap" type="com.tulingxueyuan.mall.dto.CartItemStockDTO">
+        <result property="stock" column="stock"></result>
+    </resultMap>
+
+    <select id="getCartItemStock" resultMap="CartItemStockMap">
+        SELECT
+        *,(SELECT stock-lock_stock FROM pms_sku_stock s WHERE  s.id=c.product_sku_id) as stock
+        FROM oms_cart_item c
+        WHERE c.delete_status=0 and c.member_id=#{memberId}
+
+    </select>
+
+
+    <!--根据多个购物车id批量查询 , 在xml中使用QueryWrapper， 使用customSqlSegment就可以获取mp帮我们生产条件sql语句-->
+    <select id="getCartItemStockByIds" resultMap="CartItemStockMap">
+        SELECT
+        *,(SELECT stock-lock_stock FROM pms_sku_stock s WHERE  s.id=c.product_sku_id) as stock
+        FROM oms_cart_item c
+        ${ew.customSqlSegment}
+    </select>
 
 </mapper>

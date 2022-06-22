@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.tulingxueyuan.mall.common.api.ResultCode;
 import com.tulingxueyuan.mall.common.exception.Asserts;
 import com.tulingxueyuan.mall.dto.AddCartDTO;
+import com.tulingxueyuan.mall.dto.CartItemStockDTO;
 import com.tulingxueyuan.mall.modules.oms.model.OmsCartItem;
 import com.tulingxueyuan.mall.modules.oms.mapper.OmsCartItemMapper;
 import com.tulingxueyuan.mall.modules.oms.service.OmsCartItemService;
@@ -112,6 +113,36 @@ public class OmsCartItemServiceImpl extends ServiceImpl<OmsCartItemMapper, OmsCa
             }
         }
         return 0;
+    }
+
+    @Override
+    public List<CartItemStockDTO> getList() {
+        UmsMember currentMember = memberService.getCurrentMember();
+
+
+        List<CartItemStockDTO> list=cartItemMapper.getCartItemStock(currentMember.getId());
+        return list;
+    }
+
+    /**
+     * 更新商品数量
+     * @param id
+     * @param quantity
+     * @return
+     */
+    @Override
+    public Boolean updateQuantity(Long id, Integer quantity) {
+        UpdateWrapper<OmsCartItem> updateWrapper = new UpdateWrapper<>();
+        updateWrapper.lambda()
+                .set(OmsCartItem::getQuantity,quantity)
+                .eq(OmsCartItem::getId,id);
+
+        return this.update(updateWrapper);
+    }
+
+    @Override
+    public Boolean delete(Long ids) {
+        return this.removeById(ids);
     }
 
     /**

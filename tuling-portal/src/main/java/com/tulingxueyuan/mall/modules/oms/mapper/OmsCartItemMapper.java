@@ -1,7 +1,10 @@
 package com.tulingxueyuan.mall.modules.oms.mapper;
 
+import com.tulingxueyuan.mall.dto.CartItemStockDTO;
 import com.tulingxueyuan.mall.modules.oms.model.OmsCartItem;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
  * <p>
@@ -13,4 +16,5 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
  */
 public interface OmsCartItemMapper extends BaseMapper<OmsCartItem> {
 
+    List<CartItemStockDTO> getCartItemStock(Long id);
 }
