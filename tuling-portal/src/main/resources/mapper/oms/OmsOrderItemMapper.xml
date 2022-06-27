@@ -30,4 +30,8 @@
         <result column="product_attr" property="productAttr" />
     </resultMap>
 
+    <select id="selectByOrderId" resultMap="BaseResultMap">
+        select  * from oms_order_item where order_id=#{id}
+    </select>
+
 </mapper>
