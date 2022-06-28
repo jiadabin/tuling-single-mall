@@ -2,6 +2,7 @@ package com.tulingxueyuan.mall.controller;
 
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.tulingxueyuan.mall.common.api.CommonResult;
+import com.tulingxueyuan.mall.common.exception.ApiException;
 import com.tulingxueyuan.mall.dto.ConfirmOrderDTO;
 import com.tulingxueyuan.mall.dto.OrderDetailDTO;
 import com.tulingxueyuan.mall.dto.OrderListDTO;
@@ -10,6 +11,9 @@ import com.tulingxueyuan.mall.modules.oms.model.OmsOrder;
 import com.tulingxueyuan.mall.modules.oms.service.OmsOrderService;
 import com.tulingxueyuan.mall.modules.oms.service.TradeService;
 import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiImplicitParams;
+import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -24,8 +28,8 @@ public class OrderController {
 
     @Autowired
     OmsOrderService orderService;
-//    @Autowired
-//    TradeService tradeService;
+    @Autowired
+    TradeService tradeService;
 
     /**
      *  加入购物车---生成确认订单实现
@@ -76,5 +80,23 @@ public class OrderController {
         IPage<OrderListDTO> myOrders = orderService.getMyOrders(pageSize, pageNum);
 
         return CommonResult.success(myOrders);
+    }
+
+    /**
+     * 生成当面付二维码
+     *  /order/tradeQrCode
+     orderId:this.orderId,
+     payType:1
+     */
+    @ApiOperation("支付接口，只实现支付宝支付，微信支付暂未实现")
+    @ApiImplicitParams({@ApiImplicitParam(name="orderId",value = "订单id"),
+                        @ApiImplicitParam(name="payType",value = "支付类型1:支付宝2：微信",allowableValues = "1,2",dataType = "integer")})
+    @RequestMapping(value="tradeQrCode",method = RequestMethod.POST)
+    public  CommonResult tradeQrCode(@RequestParam("orderId") Long orderId,
+                                     @RequestParam("payType") Integer payType){
+        if(payType>2 || payType<0){
+            throw new ApiException("支付类型参数错误！");
+        }
+        return tradeService.tradeQrCode(orderId,payType);
     }
 }
