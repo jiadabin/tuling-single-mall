@@ -6,6 +6,7 @@
       <module fileurl="file://$PROJECT_DIR$/tuling-common/tuling-common.iml" filepath="$PROJECT_DIR$/tuling-common/tuling-common.iml" />
       <module fileurl="file://$PROJECT_DIR$/tuling-mpbg/tuling-mpbg.iml" filepath="$PROJECT_DIR$/tuling-mpbg/tuling-mpbg.iml" />
       <module fileurl="file://$PROJECT_DIR$/tuling-portal/tuling-portal.iml" filepath="$PROJECT_DIR$/tuling-portal/tuling-portal.iml" />
+      <module fileurl="file://$PROJECT_DIR$/tuling-security/tuling-security.iml" filepath="$PROJECT_DIR$/tuling-security/tuling-security.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/tuling-single-mall.iml" filepath="$PROJECT_DIR$/.idea/tuling-single-mall.iml" />
       <module fileurl="file://$PROJECT_DIR$/tuling-test/tuling-test.iml" filepath="$PROJECT_DIR$/tuling-test/tuling-test.iml" />
     </modules>

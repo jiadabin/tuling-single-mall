@@ -8,6 +8,7 @@
         <module>tuling-admin</module>
         <module>tuling-mpbg</module>
         <module>tuling-portal</module>
+        <module>tuling-security</module>
     </modules>
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -33,6 +34,7 @@
         <velocity.version>2.2</velocity.version>
         <lombok.version>1.18.16</lombok.version>
         <mall.common.version>0.0.1-SNAPSHOT</mall.common.version>
+        <mall.security.version>0.0.1-SNAPSHOT</mall.security.version>
     </properties>
 
     <dependencies>
@@ -144,6 +146,13 @@
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
                 <version>${jjwt.version}</version>
+            </dependency>
+
+            <!--tuling-security-->
+            <dependency>
+                <groupId>com.tulingxueyuan</groupId>
+                <artifactId>tuling-security</artifactId>
+                <version>${mall.security.version}</version>
             </dependency>
         </dependencies>
     </dependencyManagement>
