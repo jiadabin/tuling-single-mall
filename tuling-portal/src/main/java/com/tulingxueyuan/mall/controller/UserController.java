@@ -62,7 +62,7 @@ public class UserController {
 
         String token = jwtTokenUtil.generateUserNameStr(login.getUsername());
 
-        session.setAttribute(ComConstants.FLAG_MEMBER_USER, login);
+//        session.setAttribute(ComConstants.FLAG_MEMBER_USER, login);
         System.out.println(login.getId());
 
         Map<String, String> tokenMap = new HashMap<>();

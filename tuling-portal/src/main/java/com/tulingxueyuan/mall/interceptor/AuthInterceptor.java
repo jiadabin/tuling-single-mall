@@ -72,7 +72,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
             throw new ApiException(ResultCode.UNAUTHORIZED);
         }
 
-        JwtTokenUtil.currentUserName.set(username);
+//        JwtTokenUtil.currentUserName.set(username);
 
         return true;
     }

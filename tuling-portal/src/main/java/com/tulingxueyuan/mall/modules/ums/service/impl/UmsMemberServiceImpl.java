@@ -3,6 +3,7 @@ package com.tulingxueyuan.mall.modules.ums.service.impl;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.crypto.digest.BCrypt;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.tulingxueyuan.mall.common.exception.ApiException;
 import com.tulingxueyuan.mall.common.exception.Asserts;
 import com.tulingxueyuan.mall.common.util.ComConstants;
 import com.tulingxueyuan.mall.common.util.JwtTokenUtil;
@@ -13,9 +14,14 @@ import com.tulingxueyuan.mall.modules.ums.model.UmsMemberLoginLog;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberCacheService;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import org.apache.tomcat.util.net.openssl.ciphers.Authentication;
+import domain.MemberDetails;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -41,6 +47,9 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
 
     @Autowired
     UmsMemberLoginLogMapper loginLogMapper;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Override
     public UmsMember register(UmsMember umsMemberParam) {
@@ -68,15 +77,15 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
     public UmsMember login(String username, String password) {
         //密码需要客户端加密后传递
         UmsMember umsAdmin=null;
-        umsAdmin = getMemberByUsername(username);
+        /*umsAdmin = getMemberByUsername(username);
         try {
             if (!BCrypt.checkpw(password, umsAdmin.getPassword())){
                 Asserts.fail("密码不正确");
             }
         } catch (Exception e) {
             Asserts.fail("登录异常：" + e.getMessage());
-        }
-        /*try {
+        }*/
+        try {
             UserDetails userDetails =  loadUserByUsername(username);
             umsAdmin=((MemberDetails)userDetails).getUmsMember();
 
@@ -94,7 +103,7 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
             insertLoginLog(username);
         } catch (Exception e) {
             Asserts.fail("登录异常:"+e.getMessage());
-        }*/
+        }
         return umsAdmin;
 
     }
@@ -106,18 +115,42 @@ public class UmsMemberServiceImpl extends ServiceImpl<UmsMemberMapper, UmsMember
      */
     public UmsMember getCurrentMember(){
         // 标识
-        /*Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        MemberDetails memberDetails =(MemberDetails) authentication.getPrincipal();
-        return memberDetails.getUmsMember();*/
-        String username = JwtTokenUtil.currentUserName.get();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        MemberDetails memberDetails =(MemberDetails)authentication.getPrincipal();
+        return memberDetails.getUmsMember();
+        /*String username = JwtTokenUtil.currentUserName.get();
         if(StrUtil.isNotBlank(username)) {
             UmsMember member = this.getMemberByUsername(username);
             return member;
         }
-        return null;
+        return null;*/
     }
 
     public UmsMember getMemberByUsername(String username) {
+        UmsMember user = memberCacheService.getUser(username);
+        if(user!=null) return  user;
+        QueryWrapper<UmsMember> wrapper = new QueryWrapper<>();
+        wrapper.lambda().eq(UmsMember::getUsername,username);
+        List<UmsMember> adminList = list(wrapper);
+        if (adminList != null && adminList.size() > 0) {
+            user = adminList.get(0);
+            memberCacheService.setUser(user);
+            return user;
+        }
+        return null;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) {
+        UmsMember umsMember = getAdminByUsername(username);
+        if(umsMember!=null){
+            return new MemberDetails(umsMember);
+        }
+        throw  new ApiException("用户名或密码错误!");
+    }
+
+    @Override
+    public UmsMember getAdminByUsername(String username) {
         UmsMember user = memberCacheService.getUser(username);
         if(user!=null) return  user;
         QueryWrapper<UmsMember> wrapper = new QueryWrapper<>();

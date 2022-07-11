@@ -24,20 +24,20 @@ public class GlobalWebAppConfigurer implements WebMvcConfigurer {
      * 该拦截器主要是为了权限验证
      * @param registry
      */
-    @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
-    }
+//    @Override
+//    public void addInterceptors(InterceptorRegistry registry) {
+//        registry.addInterceptor(authInterceptor()).addPathPatterns("/**");
+//    }
 
     /**
      * 用户验证拦截器
      * @return
      */
-    @Bean
-    @ConfigurationProperties(prefix = "secure.ignored")
-    public AuthInterceptor authInterceptor(){
-        return new AuthInterceptor();
-    }
+//    @Bean
+//    @ConfigurationProperties(prefix = "secure.ignored")
+//    public AuthInterceptor authInterceptor(){
+//        return new AuthInterceptor();
+//    }
 
     /**
      * jwt工具类
