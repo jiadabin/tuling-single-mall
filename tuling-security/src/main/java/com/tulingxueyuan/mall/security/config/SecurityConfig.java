@@ -1,11 +1,15 @@
-package com.tulingxueyuan.config;
+package com.tulingxueyuan.mall.security.config;
 
-import com.tulingxueyuan.config.component.JwtAuthenticationFilter;
-import com.tulingxueyuan.config.component.RestfulAccessDeniedHandler;
-import com.tulingxueyuan.config.component.RestfulAuthenticationEntryPoint;
-import com.tulingxueyuan.config.component.SecurityResourceRoleSource;
-import com.tulingxueyuan.config.component.dynamicSecurity.DynamicSecurityMetadataSource;
+import com.tulingxueyuan.mall.common.util.JwtTokenUtil;
+import com.tulingxueyuan.mall.security.config.component.JwtAuthenticationFilter;
+import com.tulingxueyuan.mall.security.config.component.RestfulAccessDeniedHandler;
+import com.tulingxueyuan.mall.security.config.component.RestfulAuthenticationEntryPoint;
+import com.tulingxueyuan.mall.security.config.component.SecurityResourceRoleSource;
+import com.tulingxueyuan.mall.security.config.component.dynamicSecurity.DynamicAccessDecisionManager;
+import com.tulingxueyuan.mall.security.config.component.dynamicSecurity.DynamicSecurityFilter;
+import com.tulingxueyuan.mall.security.config.component.dynamicSecurity.DynamicSecurityMetadataSource;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -15,12 +19,13 @@ import org.springframework.security.config.annotation.web.configurers.Expression
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.util.List;
 import java.util.Map;
 
-@Configuration
+//@Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     /**
@@ -84,10 +89,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 // 加入jwt认证过滤器
                 .addFilterBefore(jwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
 
+        //有动态权限配置时添加动态权限校验过滤器
+        if(dynamicSecurityService!=null){
+            registry.and().addFilterBefore(dynamicSecurityFilter(), FilterSecurityInterceptor.class);
+        }
+
+    }
+
+    /**
+     * jwt工具类
+     * @return
+     */
+    @Bean
+    public JwtTokenUtil jwtTokenUtil(){
+        return new JwtTokenUtil();
     }
 
     @Bean
-    public JwtAuthenticationFilter jwtAuthenticationFilter(){
+    public JwtAuthenticationFilter jwtAuthenticationFilter() {
         return new JwtAuthenticationFilter();
     }
 
@@ -97,12 +116,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Bean
-    public IgnoredUrlsConfig ignoredUrlsConfig(){
+    public IgnoredUrlsConfig ignoredUrlsConfig() {
         return new IgnoredUrlsConfig();
     }
 
     @Bean
-    public RestfulAccessDeniedHandler restfulAccessDeniedHandler(){
+    public RestfulAccessDeniedHandler restfulAccessDeniedHandler() {
         return new RestfulAccessDeniedHandler();
     }
 
@@ -110,5 +129,35 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Bean
     public RestfulAuthenticationEntryPoint restfulAuthenticationEntryPoint(){
         return new RestfulAuthenticationEntryPoint();
+    }
+
+    /**
+     * 作用：根据当前请求url获取对应角色
+     * @return
+     */
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicAccessDecisionManager dynamicAccessDecisionManager() {
+        return new DynamicAccessDecisionManager();
+    }
+
+    /**
+     * 作用：在FilterSecurityInterceptor前面的自定义过滤器
+     * @return
+     */
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicSecurityFilter dynamicSecurityFilter() {
+        return new DynamicSecurityFilter();
+    }
+
+    /**
+     * 作用：鉴权
+     * @return
+     */
+    @ConditionalOnBean(name = "dynamicSecurityService")
+    @Bean
+    public DynamicSecurityMetadataSource dynamicSecurityMetadataSource() {
+        return new DynamicSecurityMetadataSource();
     }
 }

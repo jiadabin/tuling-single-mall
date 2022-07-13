@@ -1,7 +1,7 @@
 package com.tulingxueyuan.mall.config;
 
-import com.tulingxueyuan.config.SecurityConfig;
 import com.tulingxueyuan.mall.modules.ums.service.UmsMemberService;
+import com.tulingxueyuan.mall.security.config.SecurityConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

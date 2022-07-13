@@ -1,4 +1,4 @@
-package com.tulingxueyuan.config.component;
+package com.tulingxueyuan.mall.security.config.component;
 
 import java.util.List;
 import java.util.Map;

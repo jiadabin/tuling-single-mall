@@ -1,4 +1,4 @@
-package com.tulingxueyuan.config.component.dynamicSecurity;
+package com.tulingxueyuan.mall.security.config.component.dynamicSecurity;
 
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.web.util.matcher.RequestMatcher;

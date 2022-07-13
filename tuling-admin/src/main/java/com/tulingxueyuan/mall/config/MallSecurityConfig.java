@@ -1,11 +1,11 @@
 package com.tulingxueyuan.mall.config;
 
-import com.tulingxueyuan.config.SecurityConfig;
-import com.tulingxueyuan.config.component.SecurityResourceRoleSource;
-import com.tulingxueyuan.config.component.dynamicSecurity.DynamicSecurityService;
 import com.tulingxueyuan.mall.dto.ResourceRoleDTO;
 import com.tulingxueyuan.mall.modules.ums.service.UmsAdminService;
 import com.tulingxueyuan.mall.modules.ums.service.UmsResourceService;
+import com.tulingxueyuan.mall.security.config.SecurityConfig;
+import com.tulingxueyuan.mall.security.config.component.SecurityResourceRoleSource;
+import com.tulingxueyuan.mall.security.config.component.dynamicSecurity.DynamicSecurityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -44,7 +44,7 @@ public class MallSecurityConfig extends SecurityConfig {
      * @return
      */
     @Bean
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return username -> umsAdminService.loadUserByUsername(username);
     }
 
@@ -79,13 +79,13 @@ public class MallSecurityConfig extends SecurityConfig {
 
             List<ResourceRoleDTO> list= umsResourceService.getAllResourceRole();
             for (ResourceRoleDTO resource : list) {
-                    // 通配符匹配器
-                    map.put(new AntPathRequestMatcher(resource.getUrl()),
-                            // 所有角色信息
-                            resource.getRoleList().stream()
-                                    .map(role-> new org.springframework.security.access.SecurityConfig(role.getName()))
-                                    .collect(Collectors.toList())
-                            );
+                // 通配符匹配器
+                map.put(new AntPathRequestMatcher(resource.getUrl()),
+                        // 所有角色信息
+                        resource.getRoleList().stream()
+                                .map(role-> new org.springframework.security.access.SecurityConfig(role.getName()))
+                                .collect(Collectors.toList())
+                );
             }
             return map;
         };

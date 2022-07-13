@@ -1,4 +1,4 @@
-package com.tulingxueyuan.config.component.dynamicSecurity;
+package com.tulingxueyuan.mall.security.config.component.dynamicSecurity;
 
 import cn.hutool.core.collection.CollUtil;
 import org.springframework.security.access.AccessDecisionManager;

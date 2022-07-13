@@ -1,6 +1,6 @@
-package com.tulingxueyuan.config.component.dynamicSecurity;
+package com.tulingxueyuan.mall.security.config.component.dynamicSecurity;
 
-import com.tulingxueyuan.config.IgnoredUrlsConfig;
+import com.tulingxueyuan.mall.security.config.IgnoredUrlsConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.access.SecurityMetadataSource;

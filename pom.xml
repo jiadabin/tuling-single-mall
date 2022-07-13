@@ -142,6 +142,7 @@
                 <version>${velocity.version}</version>
             </dependency>
 
+            <!--jwt-->
             <dependency>
                 <groupId>io.jsonwebtoken</groupId>
                 <artifactId>jjwt</artifactId>
@@ -154,6 +155,7 @@
                 <artifactId>tuling-security</artifactId>
                 <version>${mall.security.version}</version>
             </dependency>
+
         </dependencies>
     </dependencyManagement>
 </project>

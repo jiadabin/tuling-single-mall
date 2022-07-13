@@ -1,6 +1,7 @@
-package com.tulingxueyuan.config;
+package com.tulingxueyuan.mall.security.config;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.stereotype.Component;
 
 import java.util.List;
 

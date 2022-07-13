@@ -265,7 +265,7 @@ public class UmsAdminServiceImpl extends ServiceImpl<UmsAdminMapper, UmsAdmin> i
         UmsAdmin admin = getAdminByUsername(username);
         if (admin != null) {
             // 查询用户访问资源，暂留， 后续改动
-            List<UmsResource> resourceList = getResourceList(admin.getId());
+//            List<UmsResource> resourceList = getResourceList(admin.getId());
 
             List<UmsRole> roleList = getRoleList(admin.getId());
             AdminUserDetails adminUserDetails = new AdminUserDetails(admin,roleList);

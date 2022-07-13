@@ -50,7 +50,7 @@
             r.id
     </select>
 
-    <resultMap id="AllResourceRoleMap" type="com.tulingxueyuan.mall.dto.ResourceRoleDTO">
+    <resultMap id="AllResourceRoleMap" extends="BaseResultMap" type="com.tulingxueyuan.mall.dto.ResourceRoleDTO">
         <collection property="roleList" columnPrefix="rl_" resultMap="com.tulingxueyuan.mall.modules.ums.mapper.UmsRoleMapper.BaseResultMap"></collection>
     </resultMap>
 

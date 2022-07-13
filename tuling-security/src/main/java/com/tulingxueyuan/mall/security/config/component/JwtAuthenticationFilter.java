@@ -1,4 +1,4 @@
-package com.tulingxueyuan.config.component;
+package com.tulingxueyuan.mall.security.config.component;
 
 import cn.hutool.core.util.StrUtil;
 import com.tulingxueyuan.mall.common.api.ResultCode;
