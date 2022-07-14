@@ -12,6 +12,7 @@ import springfox.documentation.spi.service.contexts.SecurityContext;
 import springfox.documentation.spring.web.plugins.Docket;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -28,11 +29,27 @@ public abstract class BaseSwaggerConfig {
                 .select()
                 .apis(RequestHandlerSelectors.basePackage(swaggerProperties.getApiBasePackage()))
                 .paths(PathSelectors.any())
-                .build();
+                .build()
+                .securitySchemes(Collections.singletonList(apiKey()))
+                .securityContexts(Collections.singletonList(securityContext())) ;;
         if (swaggerProperties.isEnableSecurity()) {
             docket.securitySchemes(securitySchemes()).securityContexts(securityContexts());
         }
         return docket;
+    }
+
+    // 设置完成后会在swagger页面上出现一个Authorization按钮
+    // 就可以往请求头中设置Authorization参数了
+    private ApiKey apiKey() {
+        return new ApiKey("Authorization", "Authorization", "header");
+    }
+
+    // 需要进行安全策略的地址
+    private SecurityContext securityContext() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.regex("/*.*"))
+                .build();
     }
 
     private ApiInfo apiInfo(SwaggerProperties swaggerProperties) {
@@ -77,13 +94,23 @@ public abstract class BaseSwaggerConfig {
                 .build();
     }
 
-    private List<SecurityReference> defaultAuth() {
+    /*private List<SecurityReference> defaultAuth() {
         List<SecurityReference> result = new ArrayList<>();
         AuthorizationScope authorizationScope = new AuthorizationScope("global", "accessEverything");
         AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
         authorizationScopes[0] = authorizationScope;
         result.add(new SecurityReference("Authorization", authorizationScopes));
         return result;
+    }*/
+
+    // 哪些范围需要使用安全策略
+    List<SecurityReference> defaultAuth() {
+        AuthorizationScope authorizationScope
+                = new AuthorizationScope("global", "accessEverything");
+        AuthorizationScope[] authorizationScopes = new AuthorizationScope[1];
+        authorizationScopes[0] = authorizationScope;
+        return Collections.singletonList(
+                new SecurityReference("Authorization", authorizationScopes));
     }
 
     /**

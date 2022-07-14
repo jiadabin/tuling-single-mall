@@ -10,6 +10,7 @@ import com.tulingxueyuan.mall.modules.ums.service.UmsAdminCacheService;
 import com.tulingxueyuan.mall.modules.ums.service.UmsAdminRoleRelationService;
 import com.tulingxueyuan.mall.modules.ums.service.UmsAdminService;
 import com.tulingxueyuan.mall.common.service.RedisService;
+import com.tulingxueyuan.mall.security.config.component.dynamicSecurity.DynamicSecurityMetadataSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -31,6 +32,8 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
     private UmsAdminMapper adminMapper;
     @Autowired
     private UmsAdminRoleRelationService adminRoleRelationService;
+    @Autowired
+    private DynamicSecurityMetadataSource dynamicSecurityMetadataSource;
     @Value("${redis.database}")
     private String REDIS_DATABASE;
     @Value("${redis.expire.common}")
@@ -51,12 +54,14 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delResourceList(Long adminId) {
+        dynamicSecurityMetadataSource.clearDataSource();
         String key = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":" + adminId;
         redisService.del(key);
     }
 
     @Override
     public void delResourceListByRole(Long roleId) {
+        dynamicSecurityMetadataSource.clearDataSource();
         QueryWrapper<UmsAdminRoleRelation> wrapper = new QueryWrapper<>();
         wrapper.lambda().eq(UmsAdminRoleRelation::getRoleId,roleId);
         List<UmsAdminRoleRelation> relationList = adminRoleRelationService.list(wrapper);
@@ -69,6 +74,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delResourceListByRoleIds(List<Long> roleIds) {
+        dynamicSecurityMetadataSource.clearDataSource();
         QueryWrapper<UmsAdminRoleRelation> wrapper = new QueryWrapper<>();
         wrapper.lambda().in(UmsAdminRoleRelation::getRoleId,roleIds);
         List<UmsAdminRoleRelation> relationList = adminRoleRelationService.list(wrapper);
@@ -81,6 +87,7 @@ public class UmsAdminCacheServiceImpl implements UmsAdminCacheService {
 
     @Override
     public void delResourceListByResource(Long resourceId) {
+        dynamicSecurityMetadataSource.clearDataSource();
         List<Long> adminIdList = adminMapper.getAdminIdList(resourceId);
         if (CollUtil.isNotEmpty(adminIdList)) {
             String keyPrefix = REDIS_DATABASE + ":" + REDIS_KEY_RESOURCE_LIST + ":";
